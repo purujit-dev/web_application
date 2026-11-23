@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Books Catalog - City Library{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Library Books Catalog</h1>
+        <p class="subtitle">Browse available books and book them for 14 days.</p>
+    </div>
+    <input type="text" id="bookSearch" class="search-input" placeholder="Search by title, author, or category...">
+</div>
+
+<div class="book-grid" id="bookGrid">
+    {% for book in books %}
+    <div class="card book-card" data-search="{{ book.title|lower }} {{ book.author|lower }} {{ book.category|lower }}">
+        <span class="category-tag">{{ book.category }}</span>
+        <h3>{{ book.title }}</h3>
+        <p class="author">by {{ book.author }}</p>
+        <p class="copies">
+            Available: <strong>{{ book.available_copies }}</strong> / {{ book.total_copies }}
+        </p>
+
+        <div class="card-actions">
+            {% if user %}
+                {% if book.available_copies > 0 %}
+                    <form action="/bookings/create/{{ book.id }}" method="post">
+                        <button type="submit" class="btn btn-primary">Book Now</button>
+                    </form>
+                {% else %}
+                    <button class="btn btn-disabled" disabled>Out of Stock</button>
+                {% endif %}
+
+                {% if user.role == 'admin' %}
+                    <a href="/books/edit/{{ book.id }}" class="btn btn-secondary">Edit</a>
+                    <form action="/books/delete/{{ book.id }}" method="post" onsubmit="return confirmAction('Delete this book?');">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <a href="/login" class="btn btn-outline">Login to Book</a>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <p>No books found in the library.</p>
+    {% endfor %}
+</div>
+{% endblock %}

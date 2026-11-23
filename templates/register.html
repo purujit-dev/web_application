@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Register - City Library{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <h2>Student Registration</h2>
+    {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form action="/register" method="post" onsubmit="return validateRegisterForm();">
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required placeholder="e.g. Ananya Singh">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="e.g. ananya@student.com">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required minlength="6" placeholder="Minimum 6 characters">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="text" id="phone" name="phone" placeholder="e.g. 9876543210">
+        </div>
+        <div class="form-group">
+            <label for="student_code">Student ID / Roll No</label>
+            <input type="text" id="student_code" name="student_code" placeholder="e.g. STU-105">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+    </form>
+
+    <p class="form-footer">Already registered? <a href="/login">Login here</a></p>
+</div>
+{% endblock %}

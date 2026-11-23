@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Bookings - City Library{% endblock %}
+
+{% block content %}
+<h1>{% if user.role == 'admin' %}All Library Bookings{% else %}My Booked Books{% endif %}</h1>
+
+<div class="card">
+    {% if bookings %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                {% if user.role == 'admin' %}
+                    <th>Student</th>
+                {% endif %}
+                <th>Book Title</th>
+                <th>Author</th>
+                <th>Booked Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in bookings %}
+            <tr>
+                <td>{{ b.id }}</td>
+                {% if user.role == 'admin' %}
+                    <td>{{ b.student_name }} ({{ b.student_email }})</td>
+                {% endif %}
+                <td>{{ b.book_title }}</td>
+                <td>{{ b.book_author }}</td>
+                <td>{{ b.booking_date }}</td>
+                <td>{{ b.due_date }}</td>
+                <td><span class="status status-{{ b.status }}">{{ b.status }}</span></td>
+                <td class="action-cell">
+                    {% if b.status == 'booked' %}
+                        <form action="/bookings/return/{{ b.id }}" method="post">
+                            <button type="submit" class="btn btn-secondary btn-sm">Return</button>
+                        </form>
+                    {% endif %}
+                    <form action="/bookings/delete/{{ b.id }}" method="post" onsubmit="return confirmAction('Delete this booking record?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No bookings found. <a href="/">Browse books</a> to make a booking.</p>
+    {% endif %}
+</div>
+{% endblock %}

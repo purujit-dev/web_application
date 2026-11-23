@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}All Customer Profiles - City Library{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>All Customer (Student) Profiles</h1>
+        <p class="subtitle">Admin view of all registered students and their booking counts.</p>
+    </div>
+    <input type="text" id="customerSearch" class="search-input" placeholder="Search students by name, email, or ID...">
+</div>
+
+<div class="card">
+    {% if customers %}
+    <table class="table" id="customerTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Student Code</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Active Bookings</th>
+                <th>Total Bookings</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in customers %}
+            <tr data-search="{{ c.name|lower }} {{ c.email|lower }} {{ c.student_code|lower }}">
+                <td>{{ c.id }}</td>
+                <td>{{ c.student_code or '-' }}</td>
+                <td>{{ c.name }}</td>
+                <td>{{ c.email }}</td>
+                <td>{{ c.phone or '-' }}</td>
+                <td>{{ c.active_bookings }}</td>
+                <td>{{ c.total_bookings }}</td>
+                <td>
+                    <form action="/admin/profiles/delete/{{ c.id }}" method="post" onsubmit="return confirmAction('Delete this student account and their bookings?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No student profiles registered yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

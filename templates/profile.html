@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - City Library{% endblock %}
+
+{% block content %}
+<h1>My Profile</h1>
+
+<div class="profile-layout">
+    <div class="card">
+        <h2>Personal Details</h2>
+        <p><strong>Role:</strong> <span class="badge">{{ user.role }}</span></p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Member Since:</strong> {{ user.created_at }}</p>
+
+        <form action="/profile/update" method="post" class="mt-1">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" value="{{ user.name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text" id="phone" name="phone" value="{{ user.phone }}">
+            </div>
+            <div class="form-group">
+                <label for="student_code">Student / ID Code</label>
+                <input type="text" id="student_code" name="student_code" value="{{ user.student_code }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>My Recent Bookings</h2>
+        {% if bookings %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Booked On</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in bookings %}
+                <tr>
+                    <td>{{ b.title }}</td>
+                    <td>{{ b.booking_date }}</td>
+                    <td>{{ b.due_date }}</td>
+                    <td><span class="status status-{{ b.status }}">{{ b.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>You have not booked any books yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

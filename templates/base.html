@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Library Book Booking{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand">City Library</a>
+            <div class="nav-links">
+                <a href="/">Books</a>
+                {% if user %}
+                    <a href="/bookings">Bookings</a>
+                    <a href="/profile">My Profile</a>
+                    {% if user.role == 'admin' %}
+                        <a href="/admin/profiles">All Customers</a>
+                        <a href="/books/add">+ Add Book</a>
+                    {% endif %}
+                    <span class="user-badge">{{ user.name }} ({{ user.role }})</span>
+                    <a href="/logout" class="btn btn-outline">Logout</a>
+                {% else %}
+                    <a href="/login">Login</a>
+                    <a href="/register" class="btn btn-primary">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% if msg %}
+            <div class="alert alert-success">{{ msg }}</div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>City Library Book Booking System &copy; 2026</p>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
